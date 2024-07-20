@@ -52,8 +52,19 @@ acquire_lock() {
 	return 1  # Someone else has the lock.
 }
 
+fix_tab_name() {
+    if [ "$TERM_PROGRAM" = tmux ]; then
+        tab_name=$(tmux display-message -p '#W')
+        session_name=$(tmux display-message -p '#T')
+        if [[ $tab_name != "" && $session_name != $tab_name ]]; then
+            tmux select-pane -T $tab_name
+        fi
+    fi
+}
+
 main() {
 	if enough_time_since_last_run_passed && supported_tmux_version_ok && auto_save_not_disabled && acquire_lock; then
+        fix_tab_name
 		fetch_and_run_tmux_resurrect_save_script
 	fi
 }
