@@ -53,7 +53,7 @@ acquire_lock() {
 }
 
 main() {
-	if supported_tmux_version_ok && auto_save_not_disabled && enough_time_since_last_run_passed && acquire_lock; then
+	if enough_time_since_last_run_passed && supported_tmux_version_ok && auto_save_not_disabled && acquire_lock; then
 		fetch_and_run_tmux_resurrect_save_script
 	fi
 }
