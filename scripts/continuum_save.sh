@@ -11,6 +11,10 @@ supported_tmux_version_ok() {
 }
 
 get_interval() {
+    if [ $TMUX_CONTINUUM_SAVE_INTERVAL ]; then
+        echo $TMUX_CONTINUUM_SAVE_INTERVAL
+        return
+    fi
 	get_tmux_option "$auto_save_interval_option" "$auto_save_interval_default"
 }
 
