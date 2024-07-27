@@ -10,6 +10,11 @@ supported_tmux_version_ok() {
 	"$CURRENT_DIR/check_tmux_version.sh" "$SUPPORTED_VERSION"
 }
 
+# .bashrc
+# if [ -f "$HOME/.tmux/plugins/tmux-continuum" ]; then
+#     source ~/.tmux/plugins/tmux-continuum/scripts/helpers.sh
+#     export TMUX_CONTINUUM_SAVE_INTERVAL=$(get_tmux_option "@continuum-save-interval" "15")
+# fi
 get_interval() {
     if [ $TMUX_CONTINUUM_SAVE_INTERVAL ]; then
         echo $TMUX_CONTINUUM_SAVE_INTERVAL
