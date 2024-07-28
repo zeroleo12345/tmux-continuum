@@ -10,12 +10,8 @@ supported_tmux_version_ok() {
 	"$CURRENT_DIR/check_tmux_version.sh" "$SUPPORTED_VERSION"
 }
 
-# .bashrc
-# if [ -f "$HOME/.tmux/plugins/tmux-continuum" ]; then
-#     source ~/.tmux/plugins/tmux-continuum/scripts/helpers.sh
-#     export TMUX_CONTINUUM_SAVE_INTERVAL=$(get_tmux_option "@continuum-save-interval" "15")
-# fi
 get_interval() {
+    # TMUX_CONTINUUM_SAVE_INTERVAL defined in tmux.conf
     if [ $TMUX_CONTINUUM_SAVE_INTERVAL ]; then
         echo $TMUX_CONTINUUM_SAVE_INTERVAL
         return
@@ -23,12 +19,8 @@ get_interval() {
 	get_tmux_option "$auto_save_interval_option" "$auto_save_interval_default"
 }
 
-auto_save_not_disabled() {
-	[ "$(get_interval)" -gt 0 ]
-}
-
 enough_time_since_last_run_passed() {
-	local last_saved_timestamp="$(get_tmux_option "$last_auto_save_option" "0")"
+	local last_saved_timestamp="$(cat ~/.tmux/resurrect/continuum-save-last-timestamp)"
 	local interval_minutes="$(get_interval)"
 	local interval_seconds="$((interval_minutes * 60))"
 	local next_run="$((last_saved_timestamp + $interval_seconds))"
@@ -39,7 +31,8 @@ fetch_and_run_tmux_resurrect_save_script() {
 	local resurrect_save_script_path="$(get_tmux_option "$resurrect_save_path_option" "")"
 	if [ -n "$resurrect_save_script_path" ]; then
 		"$resurrect_save_script_path" "quiet" >/dev/null 2>&1 &
-		set_last_save_timestamp
+		echo "$(date +%s)" > ~/.tmux/resurrect/continuum-save-last-timestamp
+		# set_last_save_timestamp
 	fi
 }
 
@@ -72,7 +65,7 @@ fix_tab_name() {
 }
 
 main() {
-	if enough_time_since_last_run_passed && supported_tmux_version_ok && auto_save_not_disabled && acquire_lock; then
+	if enough_time_since_last_run_passed && acquire_lock; then
         fix_tab_name
 		fetch_and_run_tmux_resurrect_save_script
 	fi
