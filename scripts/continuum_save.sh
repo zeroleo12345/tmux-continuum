@@ -20,7 +20,7 @@ get_interval() {
 }
 
 enough_time_since_last_run_passed() {
-	local last_saved_timestamp="$(cat ~/.tmux/resurrect/continuum-save-last-timestamp)"
+	local last_saved_timestamp="$(cat ~/.tmux/resurrect/continuum-save-last-timestamp 2>/dev/null)"
 	local interval_minutes="$(get_interval)"
 	local interval_seconds="$((interval_minutes * 60))"
 	local next_run="$((last_saved_timestamp + $interval_seconds))"
