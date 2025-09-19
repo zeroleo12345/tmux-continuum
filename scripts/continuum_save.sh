@@ -77,7 +77,7 @@ fix_tab_name() {
             if [[ "$pane_title" != "$window_name" && $pane_name != "" ]]; then
                 # 修改窗格名称为窗口名称
                 tmux select-pane -T "$window_name" -t "$window_index"
-                tmux rename-window "$window_name"
+                # tmux select-window -t "$window_index" && tmux rename-window "$window_name"
                 # echo "Updated pane title from '$pane_title' to '$window_name' for window index $window_index"
             fi  
         done
