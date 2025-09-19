@@ -74,7 +74,7 @@ fix_tab_name() {
             window_name=$(tmux list-windows -F "#{window_index} #{window_name}" | grep "^$window_index " | awk '{print $2}')
             
             # 检查窗格名称与窗口名称是否不同
-            if [[ "$pane_title" != "$window_name" && $pane_name != "" ]]; then
+            if [[ "$pane_title" != "$window_name" && $pane_title != "" ]]; then
                 # 修改窗格名称为窗口名称
                 tmux select-pane -T "$window_name" -t "$window_index"
                 # tmux select-window -t "$window_index" && tmux rename-window "$window_name"
